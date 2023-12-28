@@ -58,7 +58,7 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    resizeMode: "cover", // veya 'contain' arka planı uygun şekilde ayarlar
+    resizeMode: "contain", // veya 'contain' arka planı uygun şekilde ayarlar
   },
   container: {
     flex: 1,
