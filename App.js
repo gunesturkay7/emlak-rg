@@ -1,16 +1,13 @@
 import React, { useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { Button, Provider as PaperProvider, DefaultTheme } from "react-native-paper";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { StatusBar } from "expo-status-bar";
-import LoginScreen from "./screens/LoginScreen/LoginScreen";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Platform, StyleSheet, Text, View } from "react-native";
+import { Provider as PaperProvider, DefaultTheme, configureFonts } from "react-native-paper";
+import { tr, registerTranslation } from "react-native-paper-dates";
+registerTranslation("tr", tr);
+
 import "react-native-gesture-handler";
-import { AuthProvider, useAuth } from "./context/AuthContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthProvider } from "./context/AuthContext";
 import Navigator from "./navigation/Navigator";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const theme = {
   ...DefaultTheme,
@@ -19,15 +16,21 @@ const theme = {
     ...DefaultTheme.colors,
     primary: "#6ba5ce",
     secondary: "#807da6",
+    error: "#cd1819",
+    success: "#07911c",
+    warning: "#f5a623",
+    inputIconColor: "#b7f1ff",
   },
 };
 
 export default function App() {
   return (
-    <PaperProvider theme={theme}>
-      <AuthProvider>
-        <Navigator />
-      </AuthProvider>
-    </PaperProvider>
+    <SafeAreaProvider>
+      <PaperProvider theme={theme}>
+        <AuthProvider>
+          <Navigator />
+        </AuthProvider>
+      </PaperProvider>
+    </SafeAreaProvider>
   );
 }

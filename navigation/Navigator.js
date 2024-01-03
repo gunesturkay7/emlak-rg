@@ -3,26 +3,34 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import DrawerContent from "./DrawerContent";
 import LoginScreen from "../screens/LoginScreen/LoginScreen";
 import SplashScreen from "../screens/SplashScreen/SplashScreen";
 import { Button } from "react-native-paper";
 import { StatusBar } from "expo-status-bar";
 import { useAuth } from "../context/AuthContext";
+import TenantsScreen from "../screens/TenantsScreen/TenantsScreen";
+import AddTenantScreen from "../screens/TenantsScreen/AddTenantScreen/AddTenantScreen";
+import { Easing } from "react-native";
+import SignUpScreen from "../screens/SingUpScreen/SingUpScreen";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 export function DrawerNavigator({ navigation }) {
-  const { user } = useAuth();
-
   return (
-    <Drawer.Navigator initialRouteName="PortfolioTrackingScreen">
+    <Drawer.Navigator initialRouteName="TenantsScreen" drawerContent={(props) => <DrawerContent {...props} />}>
       <Drawer.Screen
-        name="PortfolioTrackingScreen"
-        component={PortfolioTrackingScreen}
-        options={{ drawerLabel: "Portfolio Tracking" }}
+        name="TenantsScreen"
+        component={TenantsScreen}
+        options={{ drawerLabel: "Kiracılar", title: "Kiracılar" }}
       />
-      {/* Buraya diğer ekranlarınızı ekleyebilirsiniz. */}
+      <Drawer.Screen
+        name="AddTenantScreen"
+        component={AddTenantScreen}
+        options={{ drawerLabel: "Kiracı Ekle", title: "Kiracı Ekle" }}
+      />
+      <Drawer.Screen name="DetailsScreen" component={DetailsScreen} options={{ drawerLabel: "Details" }} />
     </Drawer.Navigator>
   );
 }
@@ -60,25 +68,18 @@ function DetailsScreen({ navigation }) {
 export default function Navigator() {
   const { token, loading } = useAuth();
 
-  console.log(loading);
-
   if (loading) return <SplashScreen />;
 
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          // Animasyon ayarları buraya eklenebilir
-          transitionSpec: {
-            open: { animation: "timing", config: { duration: 500 } },
-            close: { animation: "timing", config: { duration: 500 } },
-          },
-        }}
-      >
+      <Stack.Navigator>
         {token ? (
           <Stack.Screen name="Drawer" component={DrawerNavigator} options={{ headerShown: false }} />
         ) : (
-          <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
+          <Stack.Group>
+            <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{ headerShown: false }} />
+          </Stack.Group>
         )}
       </Stack.Navigator>
     </NavigationContainer>
@@ -92,6 +93,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-/* <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Drawer" component={DrawerNavigator} options={{ headerShown: false }} />
-        <Stack.Screen name="DetailsScreen" component={DetailsScreen} /> */

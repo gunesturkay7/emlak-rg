@@ -4,10 +4,9 @@ import axios from "axios";
 
 const baseHttpClient = axios.create({
   baseURL: "https://expressjs-mongoose-production-f0ea.up.railway.app/", // API'nizin temel URL'si
-  /* baseURL: "https://expressjs-mongoose-production-f0ea.up.railway.app/", */ // API'nizin temel URL'si
-  /*   baseURL: "http://10.0.2.2:3000/", // API'nizin temel URL'si */
-  /*   baseURL: "http://localhost:3000/", // API'nizin temel URL'si
-   */ timeout: 10000,
+  /*   baseURL: "http://10.0.2.2:3000/", */ // API'nizin temel URL'si
+  /*   baseURL: "http://localhost:3000/", */ // API'nizin temel URL'si
+  timeout: 10000,
   contentType: "application/json",
   // Diğer yapılandırmalar (headers, timeout, vs.)
 });

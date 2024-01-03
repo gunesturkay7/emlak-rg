@@ -2,6 +2,10 @@
 import React, { useState, createContext, useContext, useEffect } from "react";
 import AxiosClient from "../services/baseHttpClient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { decode as atob } from "base-64";
+import { jwtDecode } from "jwt-decode";
+
+global.atob = atob;
 
 const AuthContext = createContext(null);
 
@@ -12,6 +16,9 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState(null);
 
+  /* TODO:bunu öğrent ekle belki onboarding etc.   */
+  /*   const [isFirstLaunch, setIsFirstLaunch] = useState(null); */
+
   const [error, setError] = useState(null);
 
   React.useEffect(() => {
@@ -21,12 +28,15 @@ export const AuthProvider = ({ children }) => {
 
       setLoading(true);
       try {
-        console.log("ba;ladi");
         userToken = await AsyncStorage.getItem("token");
-        console.log("token", userToken);
+
         setToken(userToken);
 
-        console.log("bitti");
+        setUser(userToken.user);
+
+        const decoded = jwtDecode(userToken);
+
+        setUser(decoded);
       } catch (e) {
         // Restoring token failed
         setLoading(false);
@@ -60,13 +70,32 @@ export const AuthProvider = ({ children }) => {
       setLoading(false); // Giriş işlemi tamamlandığında yükleme durumunu false yap
     }
   };
+  const singUp = async (credentials) => {
+    try {
+      setError(null);
+      setLoading(true); // Giriş işlemi başladığında yükleme durumunu true yap
+      const response = await AxiosClient.post("/auth/signup", credentials);
+      const { token, user } = response.data;
+      setUser(user);
+      await AsyncStorage.setItem("token", token);
+      setToken(token);
+    } catch (error) {
+      console.error(error);
+      setError(error);
+    } finally {
+      setLoading(false); // Giriş işlemi tamamlandığında yükleme durumunu false yap
+    }
+  };
 
-  const logout = () => {
+  const logout = async () => {
     setUser(null);
     setToken(null);
+    await AsyncStorage.removeItem("token");
   };
 
   return (
-    <AuthContext.Provider value={{ user, signIn, logout, error, loading, token }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, signIn, logout, singUp, error, loading, token, setLoading }}>
+      {children}
+    </AuthContext.Provider>
   );
 };

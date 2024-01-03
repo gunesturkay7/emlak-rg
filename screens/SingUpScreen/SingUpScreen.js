@@ -5,14 +5,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../context/AuthContext";
 import { StatusBar } from "expo-status-bar";
 
-const LoginScreen = ({ navigation }) => {
+const SignUpScreen = ({ navigation }) => {
+  const [email, setEmail] = React.useState("recepgunes@gmail.com");
   const [username, setUsername] = React.useState("recepgunes");
   const [password, setPassword] = React.useState("test");
-  const { user, signIn, error, loading } = useAuth(); // AuthContext kullan
+  const { user, signIn, singUp, error, loading } = useAuth(); // AuthContext kullan
   const theme = useTheme();
 
   const loginServer = () => {
-    signIn({ username, password });
+    singUp({ email, username, password });
   };
   useEffect(() => {
     if (user) {
@@ -77,7 +78,14 @@ const LoginScreen = ({ navigation }) => {
           <Card style={styles.card}>
             <Card.Content>
               <Title style={styles.title}>Hoşgeldiniz</Title>
-              <Paragraph style={styles.paragraph}>Lütfen giriş bilgilerinizi giriniz</Paragraph>
+              <Paragraph style={styles.paragraph}>Lütfen sisteme kayıt için bilgilerinizi giriniz</Paragraph>
+              <TextInput
+                label="E-posta"
+                value={email} // Yeni state'i tanımlamayı unutmayın
+                onChangeText={(text) => setEmail(text)} // Yeni state güncelleme fonksiyonu
+                mode="outlined"
+                style={styles.input}
+              />
               <TextInput
                 label="Kullanıcı Adı"
                 value={username}
@@ -85,6 +93,7 @@ const LoginScreen = ({ navigation }) => {
                 mode="outlined"
                 style={styles.input}
               />
+
               <TextInput
                 label="Şifre"
                 value={password}
@@ -101,12 +110,12 @@ const LoginScreen = ({ navigation }) => {
                 color={theme.colors.primary}
                 textColor={theme.colors.secondary}
               >
-                Giriş Yap
+                Kayıt Ol
               </Button>
               <TouchableOpacity onPress={() => console.log("Şifremi Unuttum")}>
                 <Text style={styles.textButton}>Şifremi Unuttum</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate("SignUpScreen")}>
+              <TouchableOpacity onPress={() => console.log("Üye Ol")}>
                 <Text style={styles.textButton}>Üye Ol</Text>
               </TouchableOpacity>
             </Card.Content>
@@ -119,4 +128,4 @@ const LoginScreen = ({ navigation }) => {
   );
 };
 
-export default LoginScreen;
+export default SignUpScreen;
