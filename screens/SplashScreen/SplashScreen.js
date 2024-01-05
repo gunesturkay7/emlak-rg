@@ -34,7 +34,7 @@ const SplashScreen = () => {
         style={styles.logo}
       />
       <Text style={styles.text}>Portöf Takibi, Analiz, Skorlama</Text>
-      <ActivityIndicator color={theme.colors.primary} size="large" animating={true} style={styles.activityIndicator} />
+      <ActivityIndicator color={theme.colors.primary} size={50} animating={true} style={styles.activityIndicator} />
     </View>
   );
 };

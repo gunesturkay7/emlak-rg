@@ -5,8 +5,12 @@ import { ActivityIndicator, Button, Card, Paragraph, Searchbar, Title, useTheme 
 import { ScrollView } from "react-native-gesture-handler";
 import { useFocusEffect, useRoute } from "@react-navigation/native";
 import TenantCard from "./TenantCard";
-import ScreenHeader from "./AddTenantScreen/ScreenHeader";
+import ScreenHeader from "./ScreenHeader";
+import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
+import { LinearGradient } from "expo-linear-gradient";
+import { showMessage } from "react-native-flash-message";
 
+const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 export default function TenantsScreen({ navigation }) {
   const { serviceCall, isLoading, setIsLoading } = useService();
   const [data, setData] = React.useState(null); // [1
@@ -15,14 +19,19 @@ export default function TenantsScreen({ navigation }) {
   const theme = useTheme();
   const route = useRoute();
 
-  /*   React.useEffect(() => {
-    serviceCall({ url: "/tenants", method: "GET" }, (err, res) => {
-      if (err) {
-        // Hata işleme
-      }
-      // Başarılı işleme
-    });
-  }, [serviceCall]); */
+  const renderShimmerPlaceholders = () => {
+    // Adjust the number of placeholders as per your requirement
+    return [...Array(3)].map((_, index) => (
+      <ShimmerPlaceholder key={index} style={styles.shimmerPlaceholderStyle}>
+        <LinearGradient
+          colors={["#4c669f", "#3b5998", "#192f6a"]} // Gradient colors
+          style={styles.gradient}
+          start={{ x: 0, y: 0 }} // You can adjust these values
+          end={{ x: 1, y: 1 }} // You can adjust these values
+        />
+      </ShimmerPlaceholder>
+    ));
+  };
   const loadTenants = async () => {
     serviceCall({ url: "/tenants", method: "GET" }, (err, res) => {
       if (err) {
@@ -58,6 +67,7 @@ export default function TenantsScreen({ navigation }) {
       justifyContent: "center",
       alignItems: "center",
       backgroundColor: "#f5f5f5",
+      height: "100%",
     },
     container: {
       flex: 1,
@@ -90,14 +100,32 @@ export default function TenantsScreen({ navigation }) {
     cardActions: {
       justifyContent: "flex-end",
     },
+    shimmerPlaceholderStyle: {
+      marginTop: 10,
+      marginHorizontal: 16,
+      height: 200, // Adjust the height as per your card size
+      width: "90%",
+      alignSelf: "center",
+      borderRadius: 5, // Match your card's border radius,
+    },
   });
 
+  useEffect(() => {
+    const message = route.params?.message;
+    if (message) {
+      showMessage({
+        message: message,
+        type: "success",
+        icon: "success",
+        duration: 1500,
+        backgroundColor: theme.colors.success, // background color
+      });
+    }
+    navigation.setParams({ message: null });
+  }, [route.params?.message]);
+
   if (isLoading || data === null) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator animating={true} color={theme.colors.primary} />
-      </View>
-    );
+    return <View style={styles.loadingContainer}>{renderShimmerPlaceholders()}</View>;
   }
 
   return (

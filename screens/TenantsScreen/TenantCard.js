@@ -1,9 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
-import { Card, Paragraph, Button, IconButton, useTheme } from "react-native-paper";
+import { View, Text, StyleSheet, TouchableWithoutFeedback, Image } from "react-native";
+import { Card, Paragraph, Button, IconButton, useTheme, Divider, TouchableRipple } from "react-native-paper";
 import moment from "moment";
+import { Icon } from "../../assets/EanalizE.svg";
+import E from "../../assets/EanalizE.svg";
 
-const TenantCard = ({ tenant, onDetailsPress }) => {
+const TenantCard = ({ navigation, tenant, onDetailsPress }) => {
   const formattedStartDate = moment(tenant.leaseStartDate).format("DD/MM/YYYY");
   const formattedEndDate = moment(tenant.leaseEndDate).format("DD/MM/YYYY");
   const [menuVisible, setMenuVisible] = React.useState(false);
@@ -16,12 +18,22 @@ const TenantCard = ({ tenant, onDetailsPress }) => {
     if (menuVisible) {
       return (
         <View style={styles.contextMenu}>
-          <Text style={styles.menuItem} onPress={closeMenu}>
-            Menü Öğesi 1
-          </Text>
-          <Text style={styles.menuItem} onPress={closeMenu}>
-            Menü Öğesi 2
-          </Text>
+          {/* Menü Öğesi 1 */}
+          <TouchableRipple
+            style={styles.menuItem}
+            onPress={() => navigation.navigate("OTPInputScreen", { tenant: tenant })}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <E width="24" height="24" style={styles.menuItemIcon} />
+              <Text>Findex Sorgusu Başlat</Text>
+            </View>
+          </TouchableRipple>
+          <Divider />
+
+          {/* Menü Öğesi 2 */}
+          <TouchableRipple style={styles.menuItem} onPress={closeMenu}>
+            <Text>Menü Öğesi 2</Text>
+          </TouchableRipple>
           {/* Diğer menü öğeleri */}
         </View>
       );
@@ -39,10 +51,7 @@ const TenantCard = ({ tenant, onDetailsPress }) => {
           </View>
           <Text style={styles.address}>{tenant.address}</Text>
           <Text style={styles.email}>{tenant.email}</Text>
-          <Paragraph style={styles.paragraph}>
-            <Text style={styles.bold}>Adres: </Text>
-            {tenant.address}
-          </Paragraph>
+
           <View style={styles.row}>
             <Paragraph style={[styles.paragraph, styles.flexHalf]}>
               <Text style={styles.bold}>Kira Başlangıç Tarihi: </Text>
@@ -55,7 +64,7 @@ const TenantCard = ({ tenant, onDetailsPress }) => {
           </View>
           <View style={styles.row}>
             <Paragraph style={[styles.paragraph, styles.flexHalf]}>
-              <Text style={styles.bold}>Aylık Kira: aaaaaaaaaaaaaaaaaaaaaa</Text>
+              <Text style={styles.bold}>Aylık Kira:</Text>
               {tenant.rentAmount}
             </Paragraph>
             <Paragraph style={[styles.paragraph, styles.flexHalf]}>
@@ -64,7 +73,7 @@ const TenantCard = ({ tenant, onDetailsPress }) => {
             </Paragraph>
           </View>
           <Paragraph style={styles.paragraph}>
-            <Text style={styles.bold}>İletişimc: </Text>
+            <Text style={styles.bold}>İletişim: </Text>
             {tenant.contactNumber}
           </Paragraph>
           {/* Diğer bilgiler burada gösterilebilir */}
@@ -79,9 +88,7 @@ const styles = StyleSheet.create({
   card: {
     marginVertical: 8,
     marginHorizontal: 16,
-
-    borderWidth: 1,
-    borderColor: "#6ba5ce",
+    elevation: 4,
   },
   title: {
     fontSize: 16,
@@ -119,6 +126,11 @@ const styles = StyleSheet.create({
   menuItem: {
     padding: 10,
     fontSize: 14, // Mobil uyumlu font boyutu
+    display: "flex",
+    flexDirection: "row",
+  },
+  menuItemIcon: {
+    marginRight: 10,
   },
   name: {
     fontWeight: "bold",

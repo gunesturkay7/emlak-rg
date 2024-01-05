@@ -3,14 +3,14 @@ import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Button, IconButton, Searchbar, useTheme } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"; // İkonlar için
 
-function ScreenHeader({ searchQuery, setSearchQuery, dataLength, navigation }) {
+function ScreenHeader({ searchQuery, setSearchQuery, dataLength, navigation, isLoading }) {
   const theme = useTheme();
 
   return (
     <View style={styles.headerContainer}>
       <View style={styles.topRow}>
         <TouchableOpacity onPress={navigation.openDrawer} style={styles.menuButton}>
-          <Icon name="menu" size={30} color={theme.colors.primary} />
+          <Icon name="menu" size={28} color={theme.colors.primary} />
         </TouchableOpacity>
         <View style={{ flex: 1 }}>
           <Text style={[styles.title, { color: theme.colors.primary }]}>Kiracılar</Text>
@@ -21,11 +21,17 @@ function ScreenHeader({ searchQuery, setSearchQuery, dataLength, navigation }) {
           icon="plus"
           onPress={() => navigation.navigate("AddTenantScreen")}
           color={theme.colors.success}
-          size={30}
+          size={28}
         />
       </View>
 
-      <Searchbar placeholder="Kiracı Ara" onChangeText={setSearchQuery} value={searchQuery} style={styles.searchBar} />
+      <Searchbar
+        placeholder="Kiracı Ara"
+        onChangeText={setSearchQuery}
+        value={searchQuery}
+        disabled={isLoading}
+        style={styles.searchBar}
+      />
     </View>
   );
 }
@@ -51,15 +57,17 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 16,
     flex: 1,
     textAlign: "center",
   },
   searchBar: {
-    elevation: 0, // Gölgeyi kaldır
+    elevation: 5, // Gölgeyi kaldır
     shadowOpacity: 0, // Gölgeyi kaldır
     borderRadius: 20, // Kenarları yuvarlak yap
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#f7f7f7",
+    marginBottom: 10,
+    height: 40,
   },
 });
 

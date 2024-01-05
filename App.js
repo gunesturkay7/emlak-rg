@@ -8,6 +8,7 @@ import "react-native-gesture-handler";
 import { AuthProvider } from "./context/AuthContext";
 import Navigator from "./navigation/Navigator";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import FlashMessage from "react-native-flash-message";
 
 const theme = {
   ...DefaultTheme,
@@ -20,6 +21,7 @@ const theme = {
     success: "#07911c",
     warning: "#f5a623",
     inputIconColor: "#b7f1ff",
+    grey: "#c4c4c4",
   },
 };
 
@@ -28,7 +30,10 @@ export default function App() {
     <SafeAreaProvider>
       <PaperProvider theme={theme}>
         <AuthProvider>
-          <Navigator />
+          <View style={{ flex: 1 }}>
+            <FlashMessage position="top" />
+            <Navigator />
+          </View>
         </AuthProvider>
       </PaperProvider>
     </SafeAreaProvider>

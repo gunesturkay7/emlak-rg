@@ -6,23 +6,25 @@ import { DatePickerInputProps } from "react-native-paper-dates";
 
 import useService from "../../../hooks/useService";
 import DatePicker from "../../../components/DatePicker/DatePicker";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 // Registering the translation
 
 export default function AddTenantScreen({ navigation }) {
   const { serviceCall, data, isLoading } = useService();
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
-  const [email, setEmail] = useState("");
+
+  const [name, setName] = useState("asd");
+  const [address, setAddress] = useState("asd");
+  const [contactNumber, setContactNumber] = useState("asd");
+  const [email, setEmail] = useState("asd");
   const [leaseStartDate, setLeaseStartDate] = useState(new Date());
   const [leaseEndDate, setLeaseEndDate] = useState(new Date());
-  const [rentAmount, setRentAmount] = useState("");
-  const [securityDeposit, setSecurityDeposit] = useState("");
-  const [rentDueDate, setRentDueDate] = useState("");
-  const [emergencyContact, setEmergencyContact] = useState("");
-  const [rentalHistory, setRentalHistory] = useState("");
-  const [notes, setNotes] = useState("");
+  const [rentAmount, setRentAmount] = useState("5");
+  const [securityDeposit, setSecurityDeposit] = useState("5");
+  const [rentDueDate, setRentDueDate] = useState("5");
+  const [emergencyContact, setEmergencyContact] = useState("213");
+  const [rentalHistory, setRentalHistory] = useState("2");
+  const [notes, setNotes] = useState("2");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
@@ -58,9 +60,12 @@ export default function AddTenantScreen({ navigation }) {
             return;
           }
           setSuccessMessage("Kiracı başarıyla eklendi.");
-          setName("");
-          setAddress("");
-          navigation.navigate("TenantsScreen", { dataAdded: true, isLoading: true });
+
+          navigation.navigate("TenantsScreen", {
+            dataAdded: true,
+            isLoading: true,
+            message: "Kiracı başarıyla eklendi.",
+          });
         }
       );
       /*   setSuccessMessage("Kiracı başarıyla eklendi.");
@@ -142,7 +147,7 @@ export default function AddTenantScreen({ navigation }) {
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator animating={true} color={theme.colors.primary} />
+        <ActivityIndicator animating={true} size={50} color={theme.colors.primary} />
       </View>
     );
   }

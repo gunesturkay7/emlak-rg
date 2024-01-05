@@ -13,6 +13,10 @@ import TenantsScreen from "../screens/TenantsScreen/TenantsScreen";
 import AddTenantScreen from "../screens/TenantsScreen/AddTenantScreen/AddTenantScreen";
 import { Easing } from "react-native";
 import SignUpScreen from "../screens/SingUpScreen/SingUpScreen";
+import FlashMessage from "react-native-flash-message";
+import StartFindexScreen from "../screens/StartFindexScreen/StartFindexScreen";
+import OTPInputScreen from "../screens/OTPInputScreen/OTPInputScreen";
+import FindexResultScreen from "../screens/FindexResultScreen/FindexResultScreen";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -31,6 +35,21 @@ export function DrawerNavigator({ navigation }) {
         options={{ drawerLabel: "Kiracı Ekle", title: "Kiracı Ekle" }}
       />
       <Drawer.Screen name="DetailsScreen" component={DetailsScreen} options={{ drawerLabel: "Details" }} />
+      <Drawer.Screen
+        name="StartFindexScreen"
+        component={StartFindexScreen}
+        options={{ drawerLabel: "StartFindexScreen" }}
+      />
+      <Drawer.Screen
+        name="OTPInputScreen"
+        component={OTPInputScreen}
+        options={{ drawerLabel: "OTPInputScreen", headerShown: false }}
+      />
+      <Drawer.Screen
+        name="FindexResultScreen"
+        component={FindexResultScreen}
+        options={{ drawerLabel: "FindexResultScreen", headerShown: false }}
+      />
     </Drawer.Navigator>
   );
 }
